@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  sudo: True
+  user: vagrant
+
+  #vars:
+  #  dns_ip: 8.8.8.8
+
+  #vars_files:
+  #  - variables.yml
+
+  tasks:
+    - name: Change the Resolve.file
+      copy: src=templates/resolv.conf dest=/etc/resolv.conf owner=root group=root mode=0644
+
+    - name: Copy the glam.resolve.file 
+      copy: src=templates/resolv.conf.glam dest=/etc/resolv.conf.glam owner=root group=root mode=0644

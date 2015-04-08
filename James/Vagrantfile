@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#$ vagrant box add junaid18183/centos_65 /e/Personal/Cloud-Drive/GDrive_NotSyncd/Vagrant_Boxes/junaid18183_centos_65.box
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.provision "shell", path: "boot.sh"
+  # Can be part of boot.sh , but I wanted to show other option for provision shell
+  config.vm.provision "shell", inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
+  config.vm.provision "shell", inline: "yum install -y puppet"
+  config.vm.synced_folder "../../../Personal/Cloud-Drive/Dropbox/Plugins-Scripts", "/plugins_scripts" , owner: "vagrant", group: "vagrant", mount_options: ["dmode=775,fmode=775"]
+  config.vm.provision "puppet" , manifest_file: "manage_host_file.pp"
+  
+#################################################################################
+   config.vm.define "tiber" , primary: true , autostart: true do |tiber|
+    tiber.vm.box = "junaid18183/centos_65"
+	tiber.vm.hostname = "tiber"
+	tiber.vm.network "private_network", ip: "172.28.128.6"
+  end
+#################################################################################
+  config.vm.define "pmaster" do |pmaster|
+    pmaster.vm.box = "junaid18183/centos_65"
+	pmaster.vm.hostname = "pmaster"
+	pmaster.vm.network "private_network", ip: "172.28.128.7"
+	pmaster.vm.provision "shell", path: "PuppetMasterInstall.sh"
+	#pmaster.vm.memory = 1024
+	pmaster.vm.provision "puppet" , manifest_file: "pmaster.pp"
+  end
+################################################################################# 
+    config.vm.define "cmaster" do |cmaster|
+    cmaster.vm.box = "junaid18183/centos_65"
+	cmaster.vm.hostname = "cmaster"
+	cmaster.vm.network "private_network", ip: "172.28.128.8"
+	cmaster.omnibus.chef_version = :latest
+	#cmaster.omnibus.chef_version will need plugin - vagrant plugin install vagrant-omnibus
+	cmaster.vm.provision "chef_solo" do |chef|
+        chef.add_recipe "base"
+    end
+	#chef-zero will not work if base machine is windows, hence using chef_solo
+	#cmaster.vm.provision "chef_client" do |chef|
+	#chef.add_recipe "base"
+	#end
+  end 
+################################################################################# 
+    config.vm.define "james" do |james|
+    james.vm.box = "junaid18183/centos_65"
+	james.vm.hostname = "james"
+	james.vm.network "private_network", ip: "172.28.128.9"
+	james.vm.provision "puppet" , manifest_file: "pclient.pp"
+  end
+################################################################################# 
+end
+################################################################################# 
+#Commented Section
+#config.vm.provision "shell", path: "https://gist.githubusercontent.com/junaid18183/62b8a4b006c68846f385/raw/7bacafd3998d33aecfe76f8b80666e611657ddb5/boot.sh"

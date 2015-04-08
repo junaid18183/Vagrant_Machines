@@ -1,0 +1,13 @@
+---
+:backends:
+  - yaml
+
+:yaml:
+  :datadir: /etc/puppet/environments/%{environment}/hieradata
+
+:hierarchy:
+  - "cert/%{::clientcert}"
+  - "group/%{::group}"
+  - "site/%{::site}"
+  - "os/%{::osfamily}"
+  - common

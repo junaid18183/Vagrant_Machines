@@ -1,0 +1,12 @@
+This is multi machine Vagrant.
+
+Machine 1) tiber -  My Jump Server, Also AnsibleMachine
+Machine 2) pmaster -  Puppet Master
+Machine 3) cmaster  - ChefZero Machine
+Machibe 4) james*   - base client ( can be used for client app for anything) ( installed puppet client on it )
+
+
+tiber -    172.28.128.6
+pmaster -  172.28.128.7
+cmaster  - 172.28.128.8
+james    - 172.28.128.9

@@ -1,0 +1,11 @@
+options timeout:1
+
+# ggva
+nameserver 10.143.2.45
+nameserver 10.143.0.45
+nameserver 10.143.2.70
+nameserver 10.143.0.70
+
+domain glam.com
+search glam.com
+
