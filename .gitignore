@@ -1,2 +1,6 @@
 */.vagrant/*
 .vagrant/*
+*/storage/*
+storage/*
+*/Storage/*
+Storage/*
