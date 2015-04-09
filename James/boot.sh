@@ -1,8 +1,6 @@
 #! /bin/bash
 # This is basic script I am using and appending to make my https://vagrantcloud.com/junaid18183/boxes/centos_65 usable.
- 
 # Add the belw section in the Vagrant File
- 
 # Vagrant.configure("2") do |config|
 #  config.vm.provision "shell", path: "https://gist.githubusercontent.com/junaid18183/62b8a4b006c68846f385/raw/7bacafd3998d33aecfe76f8b80666e611657ddb5/boot.sh"
 #end
@@ -15,12 +13,12 @@
 
 echo "Install Required Packages"
 
-yum install -y vim-enhanced git python-setuptools.noarch  nc bc  httpd.x86_64 tree MySQL-python.x86_64 man man-pages mlocate libselinux-python> /tmp/vagrant_boot.log 2>&1
-easy_install pip > /tmp/vagrant_boot.log 2>&1
+yum install -y vim-enhanced git python-setuptools.noarch  nc bc  httpd.x86_64 tree MySQL-python.x86_64 man man-pages mlocate libselinux-python
+easy_install pip
 
 # prettytable required for Sojourner
-pip install prettytable > /tmp/vagrant_boot.log 2>&1
-pip install argparse > /tmp/vagrant_boot.log 2>&1
+pip install prettytable
+pip install argparse
 
 #Turn Off Selinux"
 echo "Disable Selinux"
@@ -39,15 +37,15 @@ echo -e "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEA0VbBODTG723YPz/ikwDIbZ55lMTH4HuGbSg
 
 #Disbale IPV6
 echo "Disable ipv6"
-sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sysctl -w net.ipv6.conf.default.disable_ipv6=1
+#sysctl -w net.ipv6.conf.all.disable_ipv6=1
+#sysctl -w net.ipv6.conf.default.disable_ipv6=1
 #or 
-#echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
-#echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
+echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
 
 echo -e "NETWORKING_IPV6=no\nIPV6INIT=no" >> /etc/sysconfig/network
 
 echo "Install the puppet repo"
-yum install http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
-yum install puppet
+rpm -ivh  http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+yum -y install puppet
 /bin/true
