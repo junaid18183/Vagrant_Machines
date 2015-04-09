@@ -16,3 +16,9 @@
 
     - name: Copy the glam.resolve.file 
       copy: src=templates/resolv.conf.glam dest=/etc/resolv.conf.glam owner=root group=root mode=0644
+ 
+# Installing puppet is part of boot.sh   
+#    - name: install the puppetlabs repo
+#      yum: name=http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm state=present
+#    - name: install the puppet client
+#      yum: name=puppet enablerepo=puppetlabs-products state=present

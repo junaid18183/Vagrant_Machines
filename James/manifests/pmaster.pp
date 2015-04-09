@@ -77,6 +77,14 @@ file {"/etc/puppetdb/conf.d/jetty.ini":
   group  => puppetdb,
   mode   => 755,
 }
+
+# Install puppetdb-ruby gem
+
+package { 'ruby-puppetdb':
+    ensure   => 'installed',
+    provider => 'gem',
+}
+
 ##### BEGIN r10k install section ######
 #
 #          _     __   __
@@ -96,7 +104,7 @@ exec {'r10kinstall':
 }
 
 file {"/tmp/r10kinstall.pp":
-  content => "class {'r10k': remote => '<URL TO YOUR GIT PUPPET MODULES>', }",
+  content => "class {'r10k': remote => 'git@github.com:junaid18183/Puppet_Repository.git', }",
   ensure => file,
   owner  => root,
   group  => root,

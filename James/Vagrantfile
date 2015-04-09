@@ -6,17 +6,22 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "boot.sh"
-  # Can be part of boot.sh , but I wanted to show other option for provision shell
-  config.vm.provision "shell", inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
-  config.vm.provision "shell", inline: "yum install -y puppet"
+  config.vm.provision "shell", inline: "/usr/bin/yum -y update"
   config.vm.synced_folder "../../../Personal/Cloud-Drive/Dropbox/Plugins-Scripts", "/plugins_scripts" , owner: "vagrant", group: "vagrant", mount_options: ["dmode=775,fmode=775"]
-  config.vm.provision "puppet" , manifest_file: "manage_host_file.pp"
+  config.vm.provision "puppet" , manifest_file: "sample_puppet.pp"
+  
+  #The ansible provisioer will not work in windows,also on linux it requires ansible to be installed
+  #config.vm.provision "ansible" do |ansible|
+  #    ansible.playbook = "playbooks/base.yml"
+  #    ansible.inventory_path = "playbooks/inventory"
+  #  end
   
 #################################################################################
    config.vm.define "tiber" , primary: true , autostart: true do |tiber|
     tiber.vm.box = "junaid18183/centos_65"
 	tiber.vm.hostname = "tiber"
 	tiber.vm.network "private_network", ip: "172.28.128.6"
+	tiber.vm.provision "shell", inline: "/usr/bin/yum install ansible"
   end
 #################################################################################
   config.vm.define "pmaster" do |pmaster|
